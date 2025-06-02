@@ -14,8 +14,7 @@ public class EventBus : IEventBus {
  }
  public void Emit(IEvent reason) {
   foreach(var listener in this.m_Listeners) {
-   var type = reason.Type;
-   if(type.IsAssignableFrom(listener.EventType)) {
+   if(reason.Type.IsAssignableFrom(listener.EventType)) {
     listener.Emit(reason);
    }
   }
