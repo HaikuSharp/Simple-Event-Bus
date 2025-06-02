@@ -20,14 +20,16 @@ public class EventBus : IEventBus {
   }
  }
  private void InternalAdd(IEventListener listener) {
-  if(!this.m_Listeners.Contains(listener)) {
-   this.m_Listeners.Add(listener);
-   this.m_Listeners.Sort();
+  var listeners = this.m_Listeners;
+  if(!listeners.Contains(listener)) {
+   listeners.Add(listener);
+   listeners.Sort();
   }
  }
  private void InternalRemove(IEventListener listener) {
-  if(this.m_Listeners.Remove(listener)) {
-   this.m_Listeners.Sort();
+  var listeners = this.m_Listeners;
+  if(listeners.Remove(listener)) {
+   listeners.Sort();
   }
  }
  private EventListenerDisposeble CreateDisposable(IEventListener listener) {
