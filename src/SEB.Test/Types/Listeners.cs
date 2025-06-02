@@ -6,7 +6,7 @@ public class Event0Listener(int order) : EventListenerBase<Event0> {
    return order;
   }
  }
- protected override void Listen(Event0 reason) {
+ protected override void Emit(Event0 reason) {
   Console.WriteLine($"Hello, My order is {order}");
  }
 }
@@ -16,7 +16,7 @@ public class Event1Listener(int order) : EventListenerBase<Event1> {
    return order;
   }
  }
- protected override void Listen(Event1 reason) {
+ protected override void Emit(Event1 reason) {
   Console.WriteLine($"Bye, My order was {order}");
  }
 }

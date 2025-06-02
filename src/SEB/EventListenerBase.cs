@@ -5,7 +5,7 @@ namespace SEB;
 public abstract class EventListenerBase : IEventListener {
  public abstract Type EventType { get; }
  public abstract int Order { get; }
- public abstract void Listen(IEvent reason);
+ public abstract void Emit(IEvent reason);
  public int CompareTo(IEventListener other) {
   return this.Order.CompareTo(other.Order);
  }
@@ -16,11 +16,11 @@ public abstract class EventListenerBase<TEvent> : EventListenerBase where TEvent
    return typeof(TEvent);
   }
  }
- public override void Listen(IEvent reason) {
+ public override void Emit(IEvent reason) {
   if(reason.Is<IEvent, TEvent>(out var casted)) {
-   this.Listen(casted);
+   this.Emit(casted);
   }
 
  }
- protected abstract void Listen(TEvent reason);
+ protected abstract void Emit(TEvent reason);
 }

@@ -13,7 +13,7 @@ public class ScriptableEventListener(Type eventType, int order, ScriptableEventL
    return order;
   }
  }
- public override void Listen(IEvent reason) {
+ public override void Emit(IEvent reason) {
   handler?.Invoke(reason);
  }
 }
@@ -29,7 +29,7 @@ public class ScriptableEventListener<TEvent>(int order, ScriptableEventListener<
    return order;
   }
  }
- protected override void Listen(TEvent reason) {
+ protected override void Emit(TEvent reason) {
   handler?.Invoke(reason);
  }
 }
