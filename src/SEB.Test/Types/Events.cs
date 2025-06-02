@@ -1,4 +1,15 @@
-﻿using SEB.Abstraction;
-namespace SEB.Test.Types;
-public class Event0 : IEvent;
-public class Event1 : IEvent;
+﻿namespace SEB.Test.Types;
+public sealed class Event0 : EventBase {
+ public override string Name {
+  get {
+   return "Custom #0";
+  }
+ }
+}
+public sealed class Event1 : EventBase {
+ public override string Name {
+  get {
+   return "Custom #1";
+  }
+ }
+}
