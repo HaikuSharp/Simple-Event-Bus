@@ -5,12 +5,12 @@ using System.Collections.Generic;
 namespace SEB;
 public class EventBus : IEventBus {
  private readonly List<IEventListener> m_Listeners = [];
- public IDisposable Subscribe(IEventListener lisener) {
-  this.InternalAdd(lisener);
-  return this.CreateDisposable(lisener);
+ public IDisposable Subscribe(IEventListener listener) {
+  this.InternalAdd(listener);
+  return this.CreateDisposable(listener);
  }
- public void Unsubscribe(IEventListener lisener) {
-  this.InternalRemove(lisener);
+ public void Unsubscribe(IEventListener listener) {
+  this.InternalRemove(listener);
  }
  public void Emit(IEvent reason) {
   foreach(var listener in this.m_Listeners) {
