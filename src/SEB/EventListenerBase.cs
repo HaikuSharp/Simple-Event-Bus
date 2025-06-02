@@ -17,10 +17,9 @@ public abstract class EventListenerBase<TEvent> : EventListenerBase where TEvent
   }
  }
  public override void Emit(IEvent reason) {
-  if(reason.Is<IEvent, TEvent>(out var casted)) {
+  if(reason.Is<TEvent>(out var casted)) {
    this.Emit(casted);
   }
-
  }
  protected abstract void Emit(TEvent reason);
 }
