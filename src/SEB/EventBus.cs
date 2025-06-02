@@ -1,5 +1,4 @@
 ﻿using SEB.Abstraction;
-using Sugar.Object.Extensions;
 using System;
 using System.Collections.Generic;
 namespace SEB;
@@ -14,7 +13,7 @@ public class EventBus : IEventBus {
  }
  public void Emit(IEvent reason) {
   foreach(var listener in this.m_Listeners) {
-   if(reason.Type.IsAssignableFrom(listener.EventType)) {
+   if(listener.Hear(reason)) {
     listener.Emit(reason);
    }
   }
