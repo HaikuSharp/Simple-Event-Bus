@@ -31,10 +31,10 @@ public class EventBus : IEventBus {
    listeners.Sort();
   }
  }
- private EventListenerDisposeble CreateDisposable(IEventListener listener) {
-  return new EventListenerDisposeble(this, listener);
+ private EventListenerDisposable CreateDisposable(IEventListener listener) {
+  return new EventListenerDisposable(this, listener);
  }
- private class EventListenerDisposeble(IEventBus bus, IEventListener listener) : IDisposable {
+ private class EventListenerDisposable(IEventBus bus, IEventListener listener) : IDisposable {
   public void Dispose() {
    bus.Unsubscribe(listener);
   }
