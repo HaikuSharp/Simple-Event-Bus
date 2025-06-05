@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEB.Extensions", "SEB.Exten
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEB", "SEB\SEB.csproj", "{ACB883D6-1B44-4A76-821D-9F6FBD14E24A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEB.Test", "SEB.Test\SEB.Test.csproj", "{DCAFC2A9-0EB1-4587-A425-8292171F9C5F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +32,6 @@ Global
 		{ACB883D6-1B44-4A76-821D-9F6FBD14E24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACB883D6-1B44-4A76-821D-9F6FBD14E24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACB883D6-1B44-4A76-821D-9F6FBD14E24A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCAFC2A9-0EB1-4587-A425-8292171F9C5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCAFC2A9-0EB1-4587-A425-8292171F9C5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCAFC2A9-0EB1-4587-A425-8292171F9C5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCAFC2A9-0EB1-4587-A425-8292171F9C5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
