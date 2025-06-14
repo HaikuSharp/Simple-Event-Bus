@@ -1,4 +1,6 @@
 ﻿namespace SEB.Abstraction;
-public interface IEvent {
- string Name { get; }
+
+public interface IEvent
+{
+    string Name { get; }
 }
