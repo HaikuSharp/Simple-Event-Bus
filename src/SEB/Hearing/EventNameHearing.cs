@@ -1,7 +1,7 @@
 ﻿using SEB.Abstraction;
 using System;
 
-namespace SEB;
+namespace SEB.Hearing;
 
 public class EventNameHearing(IEquatable<string> equatable) : IEventHearing
 {

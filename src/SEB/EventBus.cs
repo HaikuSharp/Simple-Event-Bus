@@ -13,6 +13,7 @@ public class EventBus : IEventBus
         InternalAdd(listener);
         return CreateDisposable(listener);
     }
+
     public void Unsubscribe(IEventListener listener) => InternalRemove(listener);
 
     public void Emit(IEvent reason)
@@ -23,6 +24,7 @@ public class EventBus : IEventBus
             listener.Emit(reason);
         }
     }
+
     private void InternalAdd(IEventListener listener)
     {
         List<IEventListener> listeners = m_Listeners;
@@ -30,6 +32,7 @@ public class EventBus : IEventBus
         listeners.Add(listener);
         listeners.Sort();
     }
+
     private void InternalRemove(IEventListener listener)
     {
         List<IEventListener> listeners = m_Listeners;

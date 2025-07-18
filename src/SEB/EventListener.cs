@@ -2,7 +2,7 @@
 
 namespace SEB;
 
-public class EventListener(int order, IEventHearing hearing, IEventEmitter emitter) : IEventListener
+public class EventListener(IEventHearing hearing, IEventEmitter emitter, int order) : IEventListener
 {
     public int Order => order;
 
