@@ -44,10 +44,6 @@ public class EventBus : IEventBus
         }
     }
 
-    /// <summary>
-    /// Adds a listener to the collection if not already present, then sorts the collection.
-    /// </summary>
-    /// <param name="listener">The listener to add.</param>
     private void InternalAdd(IEventListener listener)
     {
         List<IEventListener> listeners = m_Listeners;
@@ -56,10 +52,6 @@ public class EventBus : IEventBus
         listeners.Sort();
     }
 
-    /// <summary>
-    /// Removes a listener from the collection if present, then sorts the collection.
-    /// </summary>
-    /// <param name="listener">The listener to remove.</param>
     private void InternalRemove(IEventListener listener)
     {
         List<IEventListener> listeners = m_Listeners;
@@ -67,9 +59,9 @@ public class EventBus : IEventBus
         listeners.Sort();
     }
 
-    private EventListenerDisposable CreateDisposable(IEventListener listener) => new(this, listener);
+    private Subscription CreateDisposable(IEventListener listener) => new(this, listener);
 
-    private class EventListenerDisposable(IEventBus bus, IEventListener listener) : IDisposable
+    private class Subscription(IEventBus bus, IEventListener listener) : IDisposable
     {
         private readonly WeakReference<IEventBus> m_Bus = new(bus);
         private readonly WeakReference<IEventListener> m_Listener = new(listener);

@@ -8,10 +8,10 @@ namespace SEB;
 public abstract class EventBase : IEvent
 {
     /// <summary>
-    /// Gets the name of the event, which by default is the full type name of the event class.
+    /// Gets the name of the event, which by default is the type name of the event class.
     /// </summary>
     /// <value>
     /// The fully qualified type name of the event implementation.
     /// </value>
-    public virtual string Name => GetType().FullName;
+    public virtual string Name => GetType().Name;
 }
