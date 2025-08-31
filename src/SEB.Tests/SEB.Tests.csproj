@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<EnableMSTestRunner>true</EnableMSTestRunner>
+		<OutputType>Exe</OutputType>
+		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+		<TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<ProduceReferenceAssemblyInOutDir>false</ProduceReferenceAssemblyInOutDir>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MSTest" Version="3.9.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SEB.Abstraction\SEB.Abstraction.csproj" />
+		<ProjectReference Include="..\SEB\SEB.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
+
+</Project>

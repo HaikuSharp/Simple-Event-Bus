@@ -1,67 +1,56 @@
 ﻿using SEB.Abstraction;
-using SEB.Hearing;
 using System;
 
 namespace SEB.Extensions;
 
 /// <summary>
-/// Provides extension methods for <see cref="IEventBus"/> to simplify common event bus operations.
+/// Provides extension methods for event listener providers.
 /// </summary>
-public static class EventBusExtensions
+public static class EventListenerProviderExtensions
 {
     /// <summary>
-    /// Subscribes an emitter to handle all events of type <typeparamref name="TEvent"/>.
+    /// Subscribes a listener and returns a scope that will automatically unsubscribe when disposed.
     /// </summary>
-    /// <typeparam name="TEvent">The type of event to handle.</typeparam>
-    /// <param name="bus">The event bus.</param>
-    /// <param name="emitter">The emitter to subscribe.</param>
-    /// <returns>A disposable subscription.</returns>
-    public static IDisposable Subscribe<TEvent>(this IEventBus bus, IEventEmitter<TEvent> emitter) where TEvent : IEvent => bus.Subscribe(EventHearing<TEvent>.Default, emitter);
+    /// <param name="provider">The event listener provider.</param>
+    /// <param name="listener">The listener to subscribe.</param>
+    /// <returns>A disposable scope that will unsubscribe the listener when disposed.</returns>
+    public static SubscribeScope SubscribeWithScope(this IEventListenerProvider provider, IEventListener listener)
+    {
+        provider.Subscribe(listener);
+        return new(provider, listener);
+    }
 
     /// <summary>
-    /// Subscribes a hearing/emitter pair to handle events of type <typeparamref name="TEvent"/> with default priority.
+    /// Unsubscribes a listener and returns a scope that will automatically resubscribe when disposed.
     /// </summary>
-    /// <typeparam name="TEvent">The type of event to handle.</typeparam>
-    /// <param name="bus">The event bus.</param>
-    /// <param name="hearing">The event handler.</param>
-    /// <param name="emitter">The event emitter.</param>
-    /// <returns>A disposable subscription.</returns>
-    public static IDisposable Subscribe<TEvent>(this IEventBus bus, IEventHearing<TEvent> hearing, IEventEmitter<TEvent> emitter) where TEvent : IEvent => bus.Subscribe(hearing, emitter, 0);
+    /// <param name="provider">The event listener provider.</param>
+    /// <param name="listener">The listener to unsubscribe.</param>
+    /// <returns>A disposable scope that will resubscribe the listener when disposed.</returns>
+    public static UnsubscribeScope UnsubscribeWithScope(this IEventListenerProvider provider, IEventListener listener)
+    {
+        provider.Unsubscribe(listener);
+        return new(provider, listener);
+    }
 
     /// <summary>
-    /// Subscribes a hearing/emitter pair to handle events of type <typeparamref name="TEvent"/> with specified priority.
+    /// Represents a scope that automatically unsubscribes a listener when disposed.
     /// </summary>
-    /// <typeparam name="TEvent">The type of event to handle.</typeparam>
-    /// <param name="bus">The event bus.</param>
-    /// <param name="hearing">The event handler.</param>
-    /// <param name="emitter">The event emitter.</param>
-    /// <param name="order">The listener priority (lower values = higher priority).</param>
-    /// <returns>A disposable subscription.</returns>
-    public static IDisposable Subscribe<TEvent>(this IEventBus bus, IEventHearing<TEvent> hearing, IEventEmitter<TEvent> emitter, int order) where TEvent : IEvent => bus.Subscribe(hearing, emitter, order);
+    public readonly struct SubscribeScope(IEventListenerProvider provider, IEventListener listener) : IDisposable
+    {
+        /// <summary>
+        /// Unsubscribes the listener.
+        /// </summary>
+        public void Dispose() => provider.Unsubscribe(listener);
+    }
 
     /// <summary>
-    /// Subscribes a hearing/emitter pair to handle events with default priority.
+    /// Represents a scope that automatically resubscribes a listener when disposed.
     /// </summary>
-    /// <param name="bus">The event bus.</param>
-    /// <param name="hearing">The event handler.</param>
-    /// <param name="emitter">The event emitter.</param>
-    /// <returns>A disposable subscription.</returns>
-    public static IDisposable Subscribe(this IEventBus bus, IEventHearing hearing, IEventEmitter emitter) => bus.Subscribe(hearing, emitter, 0);
-
-    /// <summary>
-    /// Subscribes a hearing/emitter pair to handle events with specified priority.
-    /// </summary>
-    /// <param name="bus">The event bus.</param>
-    /// <param name="hearing">The event handler.</param>
-    /// <param name="emitter">The event emitter.</param>
-    /// <param name="order">The listener priority (lower values = higher priority).</param>
-    /// <returns>A disposable subscription.</returns>
-    public static IDisposable Subscribe(this IEventBus bus, IEventHearing hearing, IEventEmitter emitter, int order) => bus.Subscribe(new EventListener(hearing, emitter, order));
-
-    /// <summary>
-    /// Emits an event created from the specified source.
-    /// </summary>
-    /// <param name="bus">The event bus.</param>
-    /// <param name="source">The event source.</param>
-    public static void Emit(this IEventBus bus, IEventSource source) => bus.Emit(source.CreateReason());
+    public readonly struct UnsubscribeScope(IEventListenerProvider provider, IEventListener listener) : IDisposable
+    {
+        /// <summary>
+        /// Resubscribes the listener.
+        /// </summary>
+        public void Dispose() => provider.Subscribe(listener);
+    }
 }

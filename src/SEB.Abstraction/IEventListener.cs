@@ -3,17 +3,26 @@
 namespace SEB.Abstraction;
 
 /// <summary>
-/// Represents an event listener that can both emit and handle events,
-/// with defined ordering relative to other listeners.
+/// Represents an event listener that can handle events of a specific type.
 /// </summary>
-public interface IEventListener : IEventEmitter, IEventHearing, IComparable<IEventListener>
+/// <typeparam name="TLowLevelEvent">The base type of events that can be handled.</typeparam>
+public interface IEventListener<in TLowLevelEvent> : IEventListener, IComparable<IEventListener> where TLowLevelEvent : IEvent
 {
     /// <summary>
-    /// Gets the priority order of this listener relative to other listeners.
+    /// Handles a specific event.
     /// </summary>
-    /// <value>
-    /// An integer value indicating the listener's priority, where lower values
-    /// indicate higher priority in event processing order.
-    /// </value>
+    /// <typeparam name="TEvent">The specific type of event to handle.</typeparam>
+    /// <param name="reason">The event instance to handle.</param>
+    void Listen<TEvent>(TEvent reason) where TEvent : TLowLevelEvent;
+}
+
+/// <summary>
+/// Represents a base event listener with ordering capability.
+/// </summary>
+public interface IEventListener : IComparable<IEventListener>
+{
+    /// <summary>
+    /// Gets the order in which this listener should be executed relative to other listeners.
+    /// </summary>
     int Order { get; }
 }

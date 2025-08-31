@@ -5,72 +5,42 @@ using System.Collections.Generic;
 namespace SEB;
 
 /// <summary>
-/// A default implementation of <see cref="IEventBus"/> that manages event listeners
-/// and handles event distribution with priority ordering.
+/// Default implementation of an untyped event bus.
 /// </summary>
-public class EventBus : IEventBus
+public sealed class EventBus : EventBus<IEvent>, IEventBus;
+
+/// <summary>
+/// Default implementation of a typed event bus.
+/// </summary>
+/// <typeparam name="TLowLevelEvent">The base type of events handled by this bus.</typeparam>
+public class EventBus<TLowLevelEvent> : IEventBus<TLowLevelEvent> where TLowLevelEvent : IEvent
 {
     private readonly List<IEventListener> m_Listeners = [];
 
-    /// <summary>
-    /// Subscribes a listener to receive events from this bus.
-    /// </summary>
-    /// <param name="listener">The listener to add.</param>
-    /// <returns>
-    /// An <see cref="IDisposable"/> that will unsubscribe the listener when disposed.
-    /// </returns>
-    public IDisposable Subscribe(IEventListener listener)
+    /// <inheritdoc/>
+    public void Subscribe(IEventListener listener)
     {
-        InternalAdd(listener);
-        return CreateDisposable(listener);
-    }
-
-    /// <summary>
-    /// Unsubscribes a listener from this bus.
-    /// </summary>
-    /// <param name="listener">The listener to remove.</param>
-    public void Unsubscribe(IEventListener listener) => InternalRemove(listener);
-
-    /// <summary>
-    /// Emits an event to all subscribed listeners in priority order.
-    /// </summary>
-    /// <param name="reason">The event to distribute.</param>
-    public void Emit(IEvent reason)
-    {
-        foreach(IEventListener listener in m_Listeners)
-        {
-            if(!listener.Hear(reason)) continue;
-            listener.Emit(reason);
-        }
-    }
-
-    private void InternalAdd(IEventListener listener)
-    {
-        List<IEventListener> listeners = m_Listeners;
-        if(listeners.Contains(listener)) return;
+        var listeners = m_Listeners;
+        if(listeners.Contains(listener)) throw new InvalidOperationException();
         listeners.Add(listener);
         listeners.Sort();
     }
 
-    private void InternalRemove(IEventListener listener)
+    /// <inheritdoc/>
+    public void Unsubscribe(IEventListener listener)
     {
-        List<IEventListener> listeners = m_Listeners;
-        if(!listeners.Remove(listener)) return;
+        var listeners = m_Listeners;
+        if(!listeners.Remove(listener)) throw new InvalidOperationException();
         listeners.Sort();
     }
 
-    private Subscription CreateDisposable(IEventListener listener) => new(this, listener);
-
-    private class Subscription(IEventBus bus, IEventListener listener) : IDisposable
+    /// <inheritdoc/>
+    public void Dispatch<TEvent>(TEvent reason) where TEvent : TLowLevelEvent
     {
-        private readonly WeakReference<IEventBus> m_Bus = new(bus);
-        private readonly WeakReference<IEventListener> m_Listener = new(listener);
-
-        public void Dispose()
+        foreach(var listener in m_Listeners)
         {
-            if(!m_Bus.TryGetTarget(out IEventBus bus)) return;
-            if(!m_Listener.TryGetTarget(out IEventListener listener)) return;
-            bus.Unsubscribe(listener);
+            if(listener is not IEventListener<TEvent> reasonListener) return;
+            reasonListener.Listen(reason);
         }
     }
 }

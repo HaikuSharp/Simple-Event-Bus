@@ -1,25 +1,12 @@
-﻿using System;
-
-namespace SEB.Abstraction;
+﻿namespace SEB.Abstraction;
 
 /// <summary>
-/// Represents an event bus that manages event subscriptions and distribution.
+/// Represents a typed event bus that combines event dispatching and listener management capabilities.
 /// </summary>
-public interface IEventBus : IEventEmitter
-{
-    /// <summary>
-    /// Subscribes an event listener to receive events from this bus.
-    /// </summary>
-    /// <param name="listener">The listener to subscribe.</param>
-    /// <returns>
-    /// An <see cref="IDisposable"/> that can be used to unsubscribe the listener
-    /// by disposing it.
-    /// </returns>
-    IDisposable Subscribe(IEventListener listener);
+/// <typeparam name="TLowLevelEvent">The base type of events handled by this bus.</typeparam>
+public interface IEventBus<in TLowLevelEvent> : IEventDispatcher<TLowLevelEvent>, IEventListenerProvider where TLowLevelEvent : IEvent;
 
-    /// <summary>
-    /// Unsubscribes an event listener from this bus.
-    /// </summary>
-    /// <param name="listener">The listener to unsubscribe.</param>
-    void Unsubscribe(IEventListener listener);
-}
+/// <summary>
+/// Represents an untyped event bus that handles events of any type.
+/// </summary>
+public interface IEventBus : IEventDispatcher<IEvent>, IEventListenerProvider;
